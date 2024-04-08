@@ -1,23 +1,41 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import Header from "./components/Header";
+import Form from "./components/Form";
+import ItemList from "./components/ItemList";
+import { useState } from "react";
 
 function App() {
+  const [items, setItems] = useState([]);
+
+  function handleAddItems(item) {
+    setItems((items) => [...items, item]);
+  }
+
+  function handleItemCheck(updatedItem) {
+    setItems((prevItems) =>
+      prevItems.map((i) => (i.id === updatedItem.id ? updatedItem : i))
+    );
+  }
+
+  function updateItem(updatedItem) {
+    setItems((prevItems) =>
+      prevItems.map((item) => (item.id === updatedItem.id ? updatedItem : item))
+    );
+  }
+
+  function handleDeleteItem(itemId) {
+    setItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header />
+      <Form onAddItem={handleAddItems} />
+      <ItemList
+        items={items}
+        onItemCheck={handleItemCheck}
+        onDeleteItem={handleDeleteItem}
+      />
     </div>
   );
 }
